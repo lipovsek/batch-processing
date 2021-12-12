@@ -1,0 +1,31 @@
+# argo submit example.yaml -p message="custom message"
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: { include "ml-workflow.fullname" . }
+spec:
+  templates:
+  {{- range .Values.workflow_files }}
+  - name: {{ . | replace ".py" "" }}
+    container:
+      image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+      args: [{{ . | quote }}]
+      envFrom:
+      {{- range $secretType, $secretData := $.Values.secrets }}
+      - secretRef:
+        name: {{ $secretType }}
+      {{- end }}      
+      # TODO : move this duplicate in template
+      {{- range $_, $key := (tuple "imagePullPolicy" "resources" "podSecurityContext" ) }}
+      {{- $parameter := index $.Values $key }}
+      {{- if $parameter }}
+      {{ $key }} : {{ index $.Values $key }}
+      {{- end }}
+      {{- end }}
+    {{- range $_, $key := (tuple "nodeSelector" "securityContext" "tolerations" "affinity") }}
+    {{- $parameter := index $.Values $key }}
+    {{- if $parameter }}
+    {{ $key }} : {{ index $.Values $key }}
+    {{- end }}
+    {{- end }}
+  {{- end }}

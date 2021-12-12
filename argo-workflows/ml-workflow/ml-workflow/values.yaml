@@ -1,0 +1,48 @@
+image:
+  repository: ghcr.io/lipovsek/batch-processing/argo
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "v0.0.1"
+
+imagePullSecrets: []
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+secrets:
+  db:
+    user: user
+    password: password
+    name: name
+    host: 1.1.1.1
+  aws:
+    access_key: a
+    secret_key: b
+workflow_files:
+  - fetch_data.py
+  - preprocess_data.py
+  - hyperparameter_tuning.py
+  - test_accuracy.py

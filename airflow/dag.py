@@ -11,13 +11,14 @@ def fetch_data():
     r = get(f"https://raw.githubusercontent.com/sledilnik/data/master/csv/{csv_file}")
     with open(csv_file, "w") as f:
         f.write(r.text)
+    df = pd.read_csv(csv_file, parse_dates=["date"])
+    df.to_sql("cases", create_engine())
 
 
 def preprocess_data():
     import pandas as pd
 
-    csv_file = "cases.csv"
-    df = pd.read_csv(csv_file, parse_dates=["date"])
+    df = pd.read_sql_table("cases", create_engine())
     df["week"] = df.date.dt.week
     df["year"] = df.date.dt.year
     weeks = df.groupby(["year", "week"]).date.nunique()
@@ -77,6 +78,7 @@ def test_accuracy():
     from joblib import load
     import pandas as pd
 
+    engine = create_engine()
     y_test, X_test = pd.read_sql_table("y_test", engine), pd.read_sql_table(
         "X_test", engine
     )
@@ -95,6 +97,8 @@ def create_engine():
 
 
 def get_boto_resource():
+    import boto3
+
     ACCESS_KEY, SECRET_KEY = "a", "b"
     return boto3.client(
         "s3",
