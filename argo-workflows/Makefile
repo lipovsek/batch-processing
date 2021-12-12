@@ -7,3 +7,5 @@ expose:
 minikube_stop:
 	minikube delete
 stop: minikube_stop
+build_workflow_image:
+	docker build -f ml-workflow/Dockerfile  -t ${IMAGE:-ghcr.io/lipovsek/batch-processing/argo} .

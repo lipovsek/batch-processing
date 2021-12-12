@@ -1,8 +1,7 @@
 image:
   repository: ghcr.io/lipovsek/batch-processing/argo
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "v0.0.1"
+  tag: v0.0.1
 
 imagePullSecrets: []
 podAnnotations: {}
@@ -42,7 +41,7 @@ secrets:
     access_key: a
     secret_key: b
 workflow_files:
-  - fetch_data.py
-  - preprocess_data.py
-  - hyperparameter_tuning.py
-  - test_accuracy.py
+  - fetch-data.py
+  - preprocess-data.py
+  - hyperparameter-tuning.py
+  - test-accuracy.py

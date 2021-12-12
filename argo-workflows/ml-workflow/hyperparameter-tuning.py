@@ -8,7 +8,7 @@ from utils import create_engine, get_boto_resource, defaults
 
 
 def hyperparameter_tuning():
-    engine = create_engine()
+    """ engine = create_engine()
     X_train, X_test, y_train, y_test = train_test_split(
         pd.read_sql_table("X", engine),
         pd.read_sql_table("y", engine),
@@ -39,7 +39,12 @@ def hyperparameter_tuning():
     get_boto_resource().upload_file(
         model_pkl, defaults["S3_bucket"], defaults["S3_path"]
     )
-    print("Best parameters: ", rf_random.best_params_)
+    print("Best parameters: ", rf_random.best_params_) """
+    import os
+    print("hyperparameter_tuning")
+    print(os.environ)
+    import time
+    time.sleep(10)
 
 
 if __name__ == "__main__":
