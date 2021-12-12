@@ -1,0 +1,4 @@
+config:
+  core:
+    # This is ignored when used with the official Docker image
+    load_examples: 'True'
