@@ -1,15 +1,22 @@
-# argo submit example.yaml -p message="custom message"
+{{- $workflowTemplate := "workflow-template" }}
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
   generateName: { include "ml-workflow.fullname" . }
 spec:
   templates:
+  - name: ml-workflow
+    steps:
   {{- range .Values.workflow_files }}
-  - name: {{ . | replace ".py" "" }}
+    - - name: {{ . | replace ".py" "" }}
+        template: {{ $workflowTemplate }}
+        arguments:
+          parameters: [{name: file, value: {{ . }}}]
+  {{- end }}
+  - name: {{ $workflowTemplate }}
     container:
       image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
-      args: [{{ . | quote }}]
+      args: [{{`"{{inputs.parameters.file}}"`}}]
       envFrom:
       {{- range $secretType, $secretData := $.Values.secrets }}
       - secretRef:
@@ -28,4 +35,3 @@ spec:
     {{ $key }} : {{ index $.Values $key }}
     {{- end }}
     {{- end }}
-  {{- end }}
