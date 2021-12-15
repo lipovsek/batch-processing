@@ -3,7 +3,7 @@ from utils import create_engine, defaults
 
 
 def preprocess_data():
-    """ csv_file = "cases.csv"
+    csv_file = "cases.csv"
     df = pd.read_sql_table("cases", create_engine())
     df["week"] = df.date.dt.week
     df["year"] = df.date.dt.year
@@ -16,12 +16,7 @@ def preprocess_data():
     y = data.groupby(["year", "week"])["cases.confirmed"].sum()
     engine = create_engine()
     X.to_sql(defaults["X"], engine)
-    y.to_sql(defaults["y"], engine) """
-    import os
-    print("preprocess_data")
-    print(os.environ)
-    import time
-    time.sleep(10)
+    y.to_sql(defaults["y"], engine)
 
 
 if __name__ == "__main__":
